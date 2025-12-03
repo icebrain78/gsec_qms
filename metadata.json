@@ -1,0 +1,7 @@
+{
+  "name": "QMS - 품질관리 시스템 (251130)",
+  "description": "생산, 검사, 출하, 클레임 관리를 위한 통합 품질 관리 시스템 (PRD 기반)",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
