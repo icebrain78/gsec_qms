@@ -5,7 +5,8 @@ export enum UserRole {
   MANAGER = '현장관리자',
   INSPECTOR = '검사자',
   WORKER = '작업자',
-  CUSTOMER = '고객'
+  CUSTOMER = '고객',
+  PRODUCTION_LEADER = '생산책임자' // Added
 }
 
 // User (User Management)
@@ -60,6 +61,25 @@ export interface InspectionChecklistItem {
   checked?: boolean; 
 }
 
+// Defect Item for Inspection Form (New)
+export interface InspectionDefect {
+  id: string;
+  category: 'enclosure' | 'system'; // Added: 외함/시스템 구분
+  content: string;      // 불량내용
+  date: string;         // 작성일
+  writer: string;       // 작성자
+  
+  // 1단계: 작업자 조치
+  actionDate?: string;  // 조치일
+  actionBy?: string;    // 조치자
+  completed: boolean;   // 조치 완료 여부 (작업자)
+
+  // 2단계: 책임자 확인
+  verified?: boolean;      // 확인 여부 (생산책임자)
+  verifiedDate?: string;   // 확인일
+  verifiedBy?: string;     // 확인자
+}
+
 // Inspection (Inspection Table)
 export interface Inspection {
   id: string;
@@ -71,9 +91,10 @@ export interface Inspection {
   inspector: string; // 담당자
   date: string;
   checkList: InspectionChecklistItem[];
+  defectList?: InspectionDefect[]; // Added: 불량 조치 사항 리스트
 }
 
-// Defect (Defect Table)
+// Defect (Defect Table - Global Issue Tracking)
 export interface Defect {
   id: string;
   projectId: string;

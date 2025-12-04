@@ -72,6 +72,7 @@ export const mockUsers: User[] = [
   { id: 'admin', name: '관리자', role: UserRole.ADMIN, department: '경영지원팀', email: 'admin@qms.com', status: 'active', joinedDate: '2023-01-01' },
   { id: 'QM-001', name: '김철수', role: UserRole.INSPECTOR, department: '품질경영부', email: 'cs.kim@company.com', status: 'active', joinedDate: '2023-03-15' },
   { id: 'PROD-001', name: '이영희', role: UserRole.MANAGER, department: '생산부', email: 'yh.lee@company.com', status: 'active', joinedDate: '2023-04-01' },
+  { id: 'PL-001', name: '이책임', role: UserRole.PRODUCTION_LEADER, department: '생산부', email: 'pl@company.com', status: 'active', joinedDate: '2023-04-05' },
   { id: 'WORK-001', name: '박작업', role: UserRole.WORKER, department: '생산팀', email: 'worker@company.com', status: 'active', joinedDate: '2023-06-01' },
   { id: 'CUST-001', name: '고객담당자', role: UserRole.CUSTOMER, department: 'LG에너지솔루션', email: 'cust@client.com', status: 'active', joinedDate: '2023-07-01' },
 ];

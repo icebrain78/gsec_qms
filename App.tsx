@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { LayoutDashboard, ClipboardCheck, AlertTriangle, Layers, Menu, X, User as UserIcon, Users, LogOut, ClipboardList } from 'lucide-react';
+import { LayoutDashboard, ClipboardCheck, AlertTriangle, Layers, Menu, X, User as UserIcon, Users, LogOut, ClipboardList, Settings } from 'lucide-react';
 import Dashboard from './components/Dashboard';
 import ProjectManager from './components/ProjectManager';
 import InspectionManager from './components/InspectionManager';
@@ -11,7 +11,7 @@ import { fetchProjects, addProjectToDB, updateProjectInDB, updateProjectBatchInD
 import { Project, Inspection, User, UserRole } from './types';
 
 // Tab Definition Updated: Merged inspection tabs
-type Tab = 'dashboard' | 'projects' | 'inspection' | 'defects' | 'users';
+type Tab = 'dashboard' | 'projects' | 'inspection' | 'inspection-settings' | 'defects' | 'users';
 
 const App: React.FC = () => {
   // User Auth State
@@ -199,10 +199,15 @@ const App: React.FC = () => {
       // 3. Inspection Management (Merged)
       items.push({ id: 'inspection', label: '검사 관리', icon: ClipboardCheck });
 
-      // 4. Defects (Everyone except Customer)
+      // 4. Inspection Settings (Admin/Manager/Inspector Only)
+      if ([UserRole.ADMIN, UserRole.MANAGER, UserRole.INSPECTOR].includes(role)) {
+          items.push({ id: 'inspection-settings', label: '검사 항목 관리', icon: Settings });
+      }
+
+      // 5. Defects (Everyone except Customer)
       items.push({ id: 'defects', label: '불량/클레임', icon: AlertTriangle });
 
-      // 5. User Management (Only Admin)
+      // 6. User Management (Only Admin)
       if (role === UserRole.ADMIN) {
            items.push({ id: 'users', label: '사용자 관리', icon: Users });
       }
@@ -239,6 +244,18 @@ const App: React.FC = () => {
             onClearContext={() => setSelectedPanelContext(null)}
             onAddInspection={handleAddInspection}
             currentUser={currentUser}
+            isSettingsMode={false}
+        />
+      );
+      case 'inspection-settings': return (
+          <InspectionManager 
+            inspections={inspections} 
+            projects={filteredProjects} 
+            selectedPanelContext={null}
+            onClearContext={() => {}}
+            onAddInspection={async () => {}}
+            currentUser={currentUser}
+            isSettingsMode={true}
         />
       );
       case 'defects': return <div className="p-8 text-center text-gray-500">준비 중입니다.</div>;
