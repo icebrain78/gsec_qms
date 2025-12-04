@@ -1,4 +1,3 @@
-
 import { db } from './firebase';
 import { collection, getDocs, addDoc, updateDoc, doc, query, where, writeBatch, setDoc, getDoc } from 'firebase/firestore';
 import { Project, User, Inspection, UserRole } from '../types';
@@ -8,6 +7,7 @@ import { mockProjects, mockUsers } from './mockData';
 const PROJECTS_COLLECTION = 'projects';
 const USERS_COLLECTION = 'users';
 const INSPECTIONS_COLLECTION = 'inspections';
+const CHECKLIST_TEMPLATES_COLLECTION = 'checklist_templates';
 
 // --- Projects Service ---
 
@@ -210,6 +210,38 @@ export const addInspectionToDB = async (inspection: Inspection) => {
     console.log("Inspection saved/updated to DB:", docId);
   } catch (error) {
     console.error("Error saving inspection:", error);
+    throw error;
+  }
+};
+
+// --- Checklist Templates Service ---
+
+export const fetchChecklistTemplate = async (type: 'process' | 'final'): Promise<any[]> => {
+  try {
+    const docRef = doc(db, CHECKLIST_TEMPLATES_COLLECTION, type);
+    const docSnap = await getDoc(docRef);
+    
+    if (docSnap.exists()) {
+      return docSnap.data().items || [];
+    } else {
+      return [];
+    }
+  } catch (error) {
+    console.error(`Error fetching checklist template (${type}):`, error);
+    return [];
+  }
+};
+
+export const saveChecklistTemplate = async (type: 'process' | 'final', items: any[]) => {
+  try {
+    const docRef = doc(db, CHECKLIST_TEMPLATES_COLLECTION, type);
+    await setDoc(docRef, { 
+        items: items, 
+        updatedAt: new Date().toISOString() 
+    });
+    console.log(`Checklist template (${type}) saved to DB`);
+  } catch (error) {
+    console.error(`Error saving checklist template (${type}):`, error);
     throw error;
   }
 };
